@@ -1,0 +1,9 @@
+{
+    "cSpell.words": [
+        "loginform",
+        "webextensions"
+	],
+	"files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true
+}

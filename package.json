@@ -1,0 +1,196 @@
+{
+	"private": true,
+	"scripts": {
+		"lint": "xo",
+		"lint-fix": "xo --fix; stylelint --fix source/*.css",
+		"test": "npm run lint && npm run cover && run-s build",
+		"cover": "cross-env BABEL_ENV=testing jest --coverage",
+		"build": "webpack --mode=production",
+		"watch": "webpack --mode=development --watch",
+		"release:fx": "web-ext sign -s distribution -a ./",
+		"release:ch": "crx pack distribution -p key.pem -o ebn-login.crx",
+		"release:zip": "rm -f distribution/*.map;rm -f ebn-login.zip;cd distribution; zip -r ../ebn-login.zip .;",
+		"release:cws": "npm run release:zip && webstore upload --source ebn-login.zip --auto-publish",
+		"release": "run-s build update-version save-url release:*",
+		"save-url": "echo https://github.com/$TRAVIS_REPO_SLUG/tree/$TRAVIS_COMMIT > distribution/SOURCE_URL",
+		"update-version": "VERSION=$(utc-version); echo $VERSION; dot-json distribution/manifest.json version $VERSION"
+	},
+	"dependencies": {
+		"@fortawesome/fontawesome": "^1.1.8",
+		"@fortawesome/fontawesome-free-regular": "^5.0.13",
+		"@fortawesome/fontawesome-free-solid": "^5.0.13",
+		"@fortawesome/vue-fontawesome": "0.0.22",
+		"bootstrap": "^4.1.1",
+		"crx": "^3.2.1",
+		"debounce-fn": "^1.0.0",
+		"delegate": "^3.2.0",
+		"dom-chef": "^3.0.0",
+		"dom-loaded": "^1.0.0",
+		"element-ready": "^2.2.0",
+		"onetime": "^2.0.1",
+		"p-event": "^1.3.0",
+		"select-dom": "^4.1.0",
+		"to-semver": "^1.1.0",
+		"turndown": "^4.0.2",
+		"vue": "^2.5.2",
+		"vue-meta": "^1.2.0",
+		"vue-pouch": "^0.0.22",
+		"vue-router": "^3.0.1",
+		"vuex": "^3.0.0",
+		"webext-domain-permission-toggle": "0.0.2",
+		"webext-dynamic-content-scripts": "^5.0.0-2",
+		"webext-options-sync": "^0.15.0",
+		"webextension-polyfill": "^0.2.1"
+	},
+	"devDependencies": {
+		"babel-core": "^6.26.3",
+		"babel-jest": "^22.4.3",
+		"babel-loader": "^7.1.2",
+		"babel-plugin-dynamic-import-node": "^1.2.0",
+		"babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
+		"babel-plugin-transform-react-jsx": "^6.24.1",
+		"chrome-webstore-upload-cli": "^1.1.1",
+		"clean-webpack-plugin": "^0.1.19",
+		"common-tags": "^1.7.2",
+		"copy-webpack-plugin": "^4.4.2",
+		"cross-env": "^5.1.3",
+		"css-loader": "^0.28.11",
+		"dot-json": "^1.0.3",
+		"eslint-config-standard": "^10.2.1",
+		"eslint-friendly-formatter": "^3.0.0",
+		"eslint-loader": "^1.9.0",
+		"eslint-plugin-html": "^3.2.2",
+		"eslint-plugin-import": "^2.8.0",
+		"eslint-plugin-node": "^5.2.1",
+		"eslint-plugin-promise": "^3.6.0",
+		"eslint-plugin-standard": "^3.0.1",
+		"eslint-plugin-vue-libs": "^1.2.1",
+		"extract-text-webpack-plugin": "^3.0.2",
+		"jest": "*",
+		"jest-environment-jsdom": "^22.4.3",
+		"jest-environment-jsdom-global": "^1.0.3",
+		"jest-fetch-mock": "^1.5.0",
+		"jest-localstorage-mock": "^2.2.0",
+		"jsdom": "^11.10.0",
+		"mini-css-extract-plugin": "^0.4.0",
+		"npm-run-all": "^4.1.1",
+		"pug": "^2.0.0-rc.4",
+		"pug-loader": "^2.3.0",
+		"sass-loader": "^6.0.6",
+		"stylelint": "^9.1.1",
+		"stylelint-config-xo": "^0.8.0",
+		"uglifyjs-webpack-plugin": "^1.2.5",
+		"url-loader": "^0.6.2",
+		"utc-version": "^1.1.0",
+		"vue-loader": "^15.0.11",
+		"vue-style-loader": "^3.0.3",
+		"vue-template-compiler": "^2.5.2",
+		"wcer": "^1.0.3",
+		"webext": "^1.9.1-with-submit.1",
+		"webpack": "^4.6.0",
+		"webpack-cli": "^2.1.2",
+    "xo": "*",
+    "eslint": "^4.18.2",
+    "eslint-plugin-vue": "^4.3.0",
+    "friendly-errors-webpack-plugin": "^1.6.1",
+    "babel-preset-vue-app": "^1.3.1"
+	},
+	"xo": {
+		"envs": [
+			"webextensions",
+			"browser"
+    ],
+    "extends": "./.eslintrc",
+    "esnext": true,
+		"rules": {
+			"import/no-unassigned-import": "off",
+			"no-unused-vars": [
+				2,
+				{
+					"varsIgnorePattern": "^h$"
+				}
+			],
+			"function-paren-newline": "off",
+			"unicorn/no-unsafe-regex": "off"
+		},
+		"globals": [
+			"browser",
+			"chrome",
+			"expect",
+			"it",
+			"describe",
+			"jest",
+			"afterEach",
+			"fixture",
+			"portMock",
+			"jsdom"
+		]
+	},
+	"jest": {
+		"setupFiles": [
+			"./__setups__/chrome.js",
+			"./__setups__/fixture.js",
+			"./__setups__/fetch.js"
+		],
+		"collectCoverageFrom": [
+			"source/**/*.js",
+			"!source/options.js",
+			"!source/background.js",
+			"!source/content.js",
+			"!<rootDir>/node_modules/",
+			"!<rootDir>__setups__"
+		],
+		"testEnvironment": "jest-environment-jsdom-global",
+		"coverageThreshold": {
+			"global": {
+				"branches": 90,
+				"lines": 90
+			}
+		}
+	},
+	"babel": {
+		"plugins": [
+			"dynamic-import-node",
+			[
+				"transform-react-jsx",
+				{
+					"pragma": "h",
+					"useBuiltIns": true
+				}
+			]
+    ],
+    "presets": [
+      [
+        "vue-app",
+        {
+          "useBuiltIns": true
+        }
+      ]
+    ],
+		"env": {
+			"testing": {
+				"plugins": [
+					"transform-es2015-modules-commonjs"
+				]
+			}
+		}
+  },
+  "browserslist": [
+    "last 2 versions",
+    "ie > 8"
+  ],
+	"stylelint": {
+		"extends": "stylelint-config-xo",
+		"rules": {
+			"declaration-no-important": null,
+			"property-no-vendor-prefix": null,
+			"no-descending-specificity": null,
+			"property-blacklist": null,
+			"selector-class-pattern": null,
+			"selector-max-class": null,
+			"rule-empty-line-before": null,
+			"at-rule-empty-line-before": null,
+			"selector-max-compound-selectors": null
+		}
+	}
+}

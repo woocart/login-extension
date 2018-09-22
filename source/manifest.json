@@ -1,0 +1,56 @@
+{
+	"name": "WooCart Store Login",
+	"version": "0.0.1",
+	"description": "Login to your stores without visiting the WooCart app.",
+	"homepage_url": "https://app.woocart.com",
+	"manifest_version": 2,
+	"minimum_chrome_version": "58",
+	"permissions": [
+		"storage",
+		"clipboardWrite",
+		"contextMenus",
+		"activeTab",
+		"https://app.woocart.com/*",
+		"https://*.mywoocart.com/*"
+	],
+
+	"optional_permissions": [
+		"https://*/*"
+  ],
+  "options_page": "options.html",
+  "options_ui": {
+    "chrome_style": true,
+    "page": "options.html"
+  },
+	"icons": {
+		"16": "16.png",
+		"48": "32.png",
+		"128": "icon.png"
+	},
+	"browser_action": {
+		"default_icon": {
+			"16": "16.png",
+			"32": "32.png"
+		},
+		"default_popup": "popup.html"
+	},
+	"background": {
+		"scripts": [
+			"browser-polyfill.min.js",
+			"background.js"
+		],
+		"persistent": false
+	},
+	"content_scripts": [
+		{
+			"run_at": "document_start",
+			"matches": [
+				"<all_urls>"
+			],
+			"js": [
+				"browser-polyfill.min.js",
+				"content.js"
+			]
+		}
+	]
+}

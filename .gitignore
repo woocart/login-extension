@@ -1,0 +1,10 @@
+node_modules
+yarn.lock
+distribution
+.nyc_output
+coverage
+.env
+*.pem
+*.xpi
+*.crx
+*.zip
